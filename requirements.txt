@@ -1,0 +1,7 @@
+requests
+
+vk_api
+
+bs4
+
+pickle
