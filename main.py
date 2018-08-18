@@ -253,7 +253,7 @@ def main():
                                     chat_id=event.chat_id,
                                     message=(random.choice(answers3)))
                                 time.sleep(2)
-                                obj['date'][0] = int(time.strftime("%d", time.gmtime()))
+                                obj['date'][0] = int(time.strftime("%S", time.gmtime()))
                                 obj['date'][1] = pidor
                                 pickle.dump(obj, output, 2)
                                 output.close()
