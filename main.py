@@ -262,24 +262,39 @@ def main():
                         text='Данная функция работает только в беседах'
 
                 if txt[0] == 'нролл':
+
+                    chatname = str(format(event.raw[3])) + 'roll' +'.pkl'
                     imya2 = vk.users.get(user_ids=event.user_id)[0]['first_name'] + ' ' + \
-                           vk.users.get(user_ids=event.user_id)[0]['last_name']+ ' '
-                    roll=[[imya2, str(randint(0,100))]]
-                    res=vk.messages.send(chat_id=event.chat_id, message=(('Результаты розыгрыша!\n 1. '+roll[0][0]+roll[0][1]).replace('0','0⃣').replace('1','1⃣').replace('2','2⃣').replace('3','3⃣').replace('4','4⃣').replace('5','5⃣').replace('6','6⃣').replace('7','7⃣').replace('8','8⃣').replace('9','9⃣')))
+                            vk.users.get(user_ids=event.user_id)[0]['last_name'] + ' '
+                    roll = [imya2, randint(0, 100)]
+                    output = open(chatname, 'wb')
+                    obj = {event.user_id: [roll]}
+                    obj[event.user_id]
+                    pickle.dump(obj,output,2)
+                    output.close()
+                    print(roll)
+
+                    res=vk.messages.send(chat_id=event.chat_id, message=(('Результаты розыгрыша!\n 1. '+roll[0]+str(roll[1])).replace('0','0⃣').replace('1','1⃣').replace('2','2⃣').replace('3','3⃣').replace('4','4⃣').replace('5','5⃣').replace('6','6⃣').replace('7','7⃣').replace('8','8⃣').replace('9','9⃣')))
 
                 if txt[0] == 'ролл':
-                    texte = 'Результаты розыгрыша! \n'
-                    imya2 = vk.users.get(user_ids=event.user_id)[0]['first_name'] + ' ' + \
-                            vk.users.get(user_ids=event.user_id)[0]['last_name']+' '
-                    msgid=res
-                    roll.append([imya2, str(randint(0,100))])
-                    roll.sort(key=lambda s:s[1], reverse=True)
-                    print(roll)
-                    for i in range(0,len(roll)):
-                        texte+=str(i+1)+'. '+roll[i][0] + roll[i][1]+'\n'
-                    texte=texte.replace('0','0⃣').replace('1','1⃣').replace('2','2⃣').replace('3','3⃣').replace('4','4⃣').replace('5','5⃣').replace('6','6⃣').replace('7','7⃣').replace('8','8⃣').replace('9','9⃣')
-                    vk.messages.delete(peer_id=event.raw[3],message_ids=res,delete_for_all=1)
-                    res=vk.messages.send(chat_id=event.chat_id, message=texte)
+                    chatname = str(format(event.raw[3])) + 'roll' + '.pkl'
+                    input=open(chatname, 'rb')
+                    obj=pickle.load(input)
+                    if not event.user_id in obj:
+                        texte = 'Результаты розыгрыша! \n'
+                        imya2 = vk.users.get(user_ids=event.user_id)[0]['first_name'] + ' ' + \
+                                vk.users.get(user_ids=event.user_id)[0]['last_name']+' '
+                        roll = [imya2, randint(0, 100)]
+                        obj[event.user_id]=roll
+                        obj.sort(key=lambda s: s[1], reverse=True)
+                        print(obj)
+                        ob = list(obj.values())
+                        for i in range(0,len(roll)):
+                            texte+=str(i+1)+'. '+ob[i][0] + ob[i][1]+'\n'
+                        texte=texte.replace('0','0⃣').replace('1','1⃣').replace('2','2⃣').replace('3','3⃣').replace('4','4⃣').replace('5','5⃣').replace('6','6⃣').replace('7','7⃣').replace('8','8⃣').replace('9','9⃣')
+                        vk.messages.delete(peer_id=event.raw[3],message_ids=res,delete_for_all=1)
+                        res=vk.messages.send(chat_id=event.chat_id, message=texte)
+                        print(roll)
 
 
                 if not text:

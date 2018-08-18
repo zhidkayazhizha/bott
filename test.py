@@ -22,3 +22,5 @@ if sss:
     for i in range(1, f + 1):
         top += '\n' + str(i) + '. ' + ob[-1 + i][0] + ' — ' + str(ob[-1 + i][1]) + ' раз(а)'
     print(top)
+
+
